@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { useState } from 'react';
+import Header from './components/Layout/Header';
+import Meals from './components/Meals/Meals';
+import Cart from './components/Cart/Cart';
+import CartProvider from './store/CartProvider';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+function App() 
+{
+  const [cartIsShown, setCartIsShown] = useState(false);
+  
+  const showCartHandler = () =>
+  {
+    setCartIsShown(true);
+  };
+
+  const hideCartHandler = () =>{
+    setCartIsShown(false);
+  };
+  
+  return ( //Cart needs access to context to render the card items and edit them later
+  //Header needs access to cart to change it's badge in header button(no of card items) 
+  //Meals need access to cartContext because there we wanna add items to Cart
+  //With CartProvider we provide context to all the components
+    <CartProvider> 
+        {cartIsShown && <Cart onClose={hideCartHandler}/>}
+        <Header onShowCart={showCartHandler} />
+        <main>
+          <Meals />
+        </main>
+    </CartProvider>
   );
 }
 
